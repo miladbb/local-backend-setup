@@ -129,6 +129,25 @@ services:
       mysql:
         condition: service_healthy
 
+  # auth:
+  #   image: repo.backbase.com/backbase-docker-releases/authentication-dev:IPS-1.12.6.1-no-production
+  #   ports:
+  #     - "7778:8080"
+  #   environment:
+  #     <<: *common-variables
+  #     <<: *message-broker-variables
+  #     AUTHENTICATION_USERS_RESOURCE: file:/etc/auth/backbase_users.json
+  #   volumes:
+  #     - ./config/auth/backbase_users.json:/etc/auth/backbase_users.json:ro
+  #   healthcheck:
+  #     <<: *healthcheck-defaults      
+  #   links:
+  #     - registry
+  #     - message-broker
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy      
+
   access-control:
     container_name: access_control
     image: repo.backbase.com/backbase-docker-releases/access-control:${BB_VERSION}
@@ -220,20 +239,6 @@ services:
       - registry
       - identity
 
-  employee-app:
-    container_name: employee_app
-    image: harbor.backbase.eu/development/employee-web-app-essentials:2022.11
-    environment:
-      AUTH_URL: http://localhost:8180/auth/
-      API_ROOT: http://localhost:8080/api
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./nginx/api.conf:/nginx-config/server/15-api.conf
-    links:
-      - edge
-      - identity
-
   product-catalog-task:
     container_name: product_catalog_task
     image: repo.backbase.com/backbase-stream-images/product-catalog-task:${STREAM_VERSION}
@@ -282,6 +287,22 @@ services:
       - --verbose
     volumes:
       - ./stubs:/home/wiremock
+  
+  example-integration-openapi-service:
+    container_name: example_integration_openapi_service
+    image: harbor.backbase.eu/development/example-integration-openapi-service:1.0.0-SNAPSHOT
+    ports:
+      - "8090:9915"
+    environment:
+      <<: *common-variables
+      eureka.client.enabled: 'true'
+    volumes:
+      - ./scripts/HealthCheck.java:/tmp/HealthCheck.java
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: [ "CMD", "java", "/tmp/HealthCheck.java", "http://registry:8080/eureka/apps/example-integration-openapi-service", "<status>UP</status>" ]
+    links:
+      - registry
 
 volumes:
   backbase_mysql_data:
