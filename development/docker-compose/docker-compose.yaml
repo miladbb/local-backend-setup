@@ -31,7 +31,7 @@ x-healthcheck-defaults: &healthcheck-defaults
   start_period: 60s
   interval: 30s
   timeout: 5s
-  retries: 10
+  retries: 15
 
 services:
   mysql:
@@ -92,10 +92,10 @@ services:
       BACKBASE_OIDCTOKENCONVERTER_WHITELISTEDDOMAINS_0_INTERNALHOST: identity:8080
       BACKBASE_OIDCTOKENCONVERTER_WHITELISTEDDOMAINS_0_ISSUERHOST: localhost
     volumes:
-      - ./scripts/HealthCheck.java:/tmp/HealthCheck.java
+      - ./scripts:/tmp/h
     healthcheck:
       <<: *healthcheck-defaults
-      test: [ "CMD", "java", "/tmp/HealthCheck.java", "http://registry:8080/eureka/apps/token-converter", "<status>UP</status>" ]
+      test: [ "CMD", "java", "/tmp/h/HealthCheck.java", "http://registry:8080/eureka/apps/token-converter", "<status>UP</status>" ]
     links:
       - registry
       - identity
@@ -121,10 +121,10 @@ services:
       JAVA_TOOL_OPTIONS: "-Dkeycloak.migration.strategy=IGNORE_EXISTING -Dkeycloak.migration.action=import -Dkeycloak.profile.feature.upload_scripts=enabled -Dquarkus.log.category.'\"com.backbase\"'.level=DEBUG"
     volumes:
       - ../config/identity:/tmp/keycloak-export
-      - ./scripts/HealthCheck.java:/tmp/HealthCheck.java
+      - ./scripts:/tmp/h
     healthcheck:
       <<: *healthcheck-defaults
-      test: [ "CMD", "java", "/tmp/HealthCheck.java", "http://localhost:8080/auth/realms/backbase/.well-known/openid-configuration", "backbase" ]
+      test: [ "CMD", "java", "/tmp/h/HealthCheck.java", "http://localhost:8080/auth/realms/backbase/.well-known/openid-configuration", "backbase" ]
     depends_on:
       mysql:
         condition: service_healthy
@@ -159,10 +159,10 @@ services:
       <<: *database-variables
       spring.datasource.url: jdbc:mysql://mysql:3306/access-control?useSSL=false&allowPublicKeyRetrieval=true&cacheServerConfiguration=true&createDatabaseIfNotExist=true
     volumes:
-      - ./scripts/HealthCheck.java:/tmp/HealthCheck.java
+      - ./scripts:/tmp/h
     healthcheck:
       <<: *healthcheck-defaults
-      test: [ "CMD", "java", "/tmp/HealthCheck.java", "http://registry:8080/eureka/apps/access-control", "<status>UP</status>" ]
+      test: [ "CMD", "java", "/tmp/h/HealthCheck.java", "http://registry:8080/eureka/apps/access-control", "<status>UP</status>" ]
     depends_on:
       mysql:
         condition: service_healthy
@@ -181,10 +181,10 @@ services:
       <<: *database-variables
       spring.datasource.url: jdbc:mysql://mysql:3306/arrangement-manager?useSSL=false&allowPublicKeyRetrieval=true&cacheServerConfiguration=true&createDatabaseIfNotExist=true
     volumes:
-      - ./scripts/HealthCheck.java:/tmp/HealthCheck.java
+      - ./scripts:/tmp/h
     healthcheck:
       <<: *healthcheck-defaults
-      test: [ "CMD", "java", "/tmp/HealthCheck.java", "http://registry:8080/eureka/apps/arrangement-manager", "<status>UP</status>" ]
+      test: [ "CMD", "java", "/tmp/h/HealthCheck.java", "http://registry:8080/eureka/apps/arrangement-manager", "<status>UP</status>" ]
     depends_on:
       mysql:
         condition: service_healthy
@@ -207,10 +207,10 @@ services:
       BACKBASE_USERS_SYNCPRIMARYTOIDENTITYENABLED: true
       spring.cloud.discovery.client.simple.instances.user-integration-outbound-service[0].uri: http://wiremock:8080
     volumes:
-      - ./scripts/HealthCheck.java:/tmp/HealthCheck.java
+      - ./scripts:/tmp/h
     healthcheck:
       <<: *healthcheck-defaults
-      test: [ "CMD", "java", "/tmp/HealthCheck.java", "http://registry:8080/eureka/apps/user-manager", "<status>UP</status>" ]
+      test: [ "CMD", "java", "/tmp/h/HealthCheck.java", "http://registry:8080/eureka/apps/user-manager", "<status>UP</status>" ]
     depends_on:
       mysql:
         condition: service_healthy
@@ -231,10 +231,10 @@ services:
       IDENTITY_REALMCONFIGURATION_FALLBACKOPTIONS_ENABLEUSER: true
       IDENTITY_REALMCONFIGURATION_FALLBACKOPTIONS_USETEMPORARYPASSWORD: true
     volumes:
-      - ./scripts/HealthCheck.java:/tmp/HealthCheck.java
+      - ./scripts:/tmp/h
     healthcheck:
       <<: *healthcheck-defaults
-      test: [ "CMD", "java", "/tmp/HealthCheck.java", "http://registry:8080/eureka/apps/identity-integration-service", "<status>UP</status>" ]
+      test: [ "CMD", "java", "/tmp/h/HealthCheck.java", "http://registry:8080/eureka/apps/identity-integration-service", "<status>UP</status>" ]
     links:
       - registry
       - identity
@@ -290,17 +290,17 @@ services:
   
   example-integration-openapi-service:
     container_name: example_integration_openapi_service
-    image: harbor.backbase.eu/development/example-integration-openapi-service:1.0.0-SNAPSHOT
+    image: local/integration-service-template:2022.08.3-LTS-1.0.0-SNAPSHOT
     ports:
-      - "8090:9915"
+      - "8090:8080"
     environment:
       <<: *common-variables
       eureka.client.enabled: 'true'
     volumes:
-      - ./scripts/HealthCheck.java:/tmp/HealthCheck.java
+      - ./scripts:/tmp/h
     healthcheck:
       <<: *healthcheck-defaults
-      test: [ "CMD", "java", "/tmp/HealthCheck.java", "http://registry:8080/eureka/apps/example-integration-openapi-service", "<status>UP</status>" ]
+      test: [ "CMD", "java", "/tmp/h/HealthCheck.java", "http://registry:8080/eureka/apps/example-integration-openapi-service", "<status>UP</status>" ]
     links:
       - registry
 
