@@ -129,25 +129,6 @@ services:
       mysql:
         condition: service_healthy
 
-  # auth:
-  #   image: repo.backbase.com/backbase-docker-releases/authentication-dev:IPS-1.12.6.1-no-production
-  #   ports:
-  #     - "7778:8080"
-  #   environment:
-  #     <<: *common-variables
-  #     <<: *message-broker-variables
-  #     AUTHENTICATION_USERS_RESOURCE: file:/etc/auth/backbase_users.json
-  #   volumes:
-  #     - ./config/auth/backbase_users.json:/etc/auth/backbase_users.json:ro
-  #   healthcheck:
-  #     <<: *healthcheck-defaults      
-  #   links:
-  #     - registry
-  #     - message-broker
-  #   depends_on:
-  #     mysql:
-  #       condition: service_healthy      
-
   access-control:
     container_name: access_control
     image: repo.backbase.com/backbase-docker-releases/access-control:${BB_VERSION}
@@ -288,21 +269,21 @@ services:
     volumes:
       - ./stubs:/home/wiremock
   
-  example-integration-openapi-service:
-    container_name: example_integration_openapi_service
-    image: local/integration-service-template:2022.08.3-LTS-1.0.0-SNAPSHOT
-    ports:
-      - "8090:8080"
-    environment:
-      <<: *common-variables
-      eureka.client.enabled: 'true'
-    volumes:
-      - ./scripts:/tmp/h
-    healthcheck:
-      <<: *healthcheck-defaults
-      test: [ "CMD", "java", "/tmp/h/HealthCheck.java", "http://registry:8080/eureka/apps/example-integration-openapi-service", "<status>UP</status>" ]
-    links:
-      - registry
+  # <EXAMPLE-SERVICE-NAME>:
+  #   container_name: example_service
+  #   image: <DOCKER-REGISTRY>/<REPOSITORY-NAME>:<TAG>
+  #   ports:
+  #     - "8090:8080"
+  #   environment:
+  #     <<: *common-variables
+  #     eureka.client.enabled: 'true'
+  #   volumes:
+  #     - ./scripts:/tmp/h
+  #   healthcheck:
+  #     <<: *healthcheck-defaults
+  #     test: [ "CMD", "java", "/tmp/h/HealthCheck.java", "http://registry:8080/eureka/apps/<EXAMPLE-SERVICE-NAME>", "<status>UP</status>" ]
+  #   links:
+  #     - registry
 
 volumes:
   backbase_mysql_data:

@@ -1,12 +1,224 @@
 {
 	"info": {
 		"_postman_id": "e907859a-1c78-48bb-a382-c606aa952ddf",
-		"name": "Message Service API Spec",
+		"name": "Local Backend Environment Test",
 		"description": "Specs for Message Service API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "17968734"
 	},
 	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Token-converter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Token Converter is ready\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.text()).to.include(\"UP\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/token-converter/actuator/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"token-converter",
+								"actuator",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Identity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Identity is ready\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.text()).to.include(\"backbase\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{identityUrl}}/auth/realms/backbase/.well-known/openid-configuration",
+							"host": [
+								"{{identityUrl}}"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"backbase",
+								".well-known",
+								"openid-configuration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Access Control",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Token Converter is ready\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.text()).to.include(\"<status>UP</status>\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{registeryUrl}}/eureka/apps/access-control",
+							"host": [
+								"{{registeryUrl}}"
+							],
+							"path": [
+								"eureka",
+								"apps",
+								"access-control"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Arrangement Manager",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Token Converter is ready\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.text()).to.include(\"<status>UP</status>\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{registeryUrl}}/eureka/apps/arrangement-manager",
+							"host": [
+								"{{registeryUrl}}"
+							],
+							"path": [
+								"eureka",
+								"apps",
+								"arrangement-manager"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Manager",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Token Converter is ready\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.text()).to.include(\"<status>UP</status>\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{registeryUrl}}/eureka/apps/user-manager",
+							"host": [
+								"{{registeryUrl}}"
+							],
+							"path": [
+								"eureka",
+								"apps",
+								"user-manager"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Identity Integration Service",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Token Converter is ready\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.text()).to.include(\"<status>UP</status>\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{registeryUrl}}/eureka/apps/identity-integration-service",
+							"host": [
+								"{{registeryUrl}}"
+							],
+							"path": [
+								"eureka",
+								"apps",
+								"identity-integration-service"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "login",
 			"event": [
@@ -111,6 +323,19 @@
 		},
 		{
 			"name": "Get Message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status is 200\", function() {",
+							"  pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
@@ -251,12 +476,17 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://localhost:8080/api/v1",
+			"value": "http://localhost:8280",
 			"type": "string"
 		},
 		{
 			"key": "identityUrl",
-			"value": "",
+			"value": "http://localhost:8180",
+			"type": "string"
+		},
+		{
+			"key": "registeryUrl",
+			"value": "http://localhost:8761",
 			"type": "string"
 		}
 	]
