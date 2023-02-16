@@ -6,7 +6,7 @@ In this guide we'll create a lightweight Backbase setup configuring a [k3s](http
 
 - Colima with Kubernetes (k3s embedded by default) configured with at least **16GB of RAM** and **4 CPUs** - Or any local Kubernetes cluster you are comfortable with.
     * [Set up on MacOS](https://backbase.atlassian.net/wiki/spaces/CE/pages/3584589953/How+to+replace+Docker+Desktop+with+Colima)
-    * `colima start --cpu 4 --memory 16 --kubernetes`
+    * `colima start --cpu 4 --memory 16 --kubernetes --kubernetes-disable=traefik`
 > **Disclaimer**: If you already have `colima` running with insufficient resources it is recommended to delete it first
 > using: `colima delete`
 - Helmfile
@@ -78,16 +78,7 @@ Once your environment is up and running you can access it using the following UR
     * Realm Admin Credentials: `admin` / `admin`
 - Edge Gateway: http://kubernetes.docker.internal/api
 - Spring Boot Admin: http://kubernetes.docker.internal/admin
-
-### Internal Endpoints
-
-Internal endpoints are made available via ingress in case you want to access internal APIs outside the cluster:
-
-- Identity Integration: http://kubernetes.docker.internal/internal/identity-integration-service
-- Token Converter: http://kubernetes.docker.internal/internal/token-converter
-- Access Control: http://kubernetes.docker.internal/internal/access-control
-- Arrangement Manager: http://kubernetes.docker.internal/internal/arrangement-manager
-- User Manager: http://kubernetes.docker.internal/internal/user-manager
+- Jaeger: http://kubernetes.docker.internal/jaeger
 
 ## Adding a Custom Service
 
