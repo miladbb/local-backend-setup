@@ -29,7 +29,6 @@ public class ExampleController implements MessageApi {
 
     @Override
     public ResponseEntity<com.backbase.example.api.client.v1.model.Message> getMessage(@Valid @NotNull String id) {
-
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 

@@ -322,7 +322,7 @@
 			"response": []
 		},
 		{
-			"name": "Get Message",
+			"name": "Get All Messages",
 			"event": [
 				{
 					"listen": "test",
@@ -350,14 +350,16 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/api/integration-service-template/message",
+					"raw": "{{baseUrl}}/api/example-integration-service/client-api/v1/all-messages",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"api",
-						"integration-service-template",
-						"message"
+						"example-integration-service",
+						"client-api",
+						"v1",
+						"all-messages"
 					]
 				},
 				"description": "Returns all available messages"
